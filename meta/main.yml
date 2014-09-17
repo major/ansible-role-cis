@@ -1,8 +1,8 @@
 ---
 galaxy_info:
-  author: Major Hayden
+  author: Wave Accounting Inc.
   description: Audit/remediate hosts using CIS security benchmarks
-  company: M/A
+  company: Wave Accounting Inc.
   # Some suggested licenses:
   # - BSD (default)
   # - MIT
@@ -18,11 +18,11 @@ galaxy_info:
   # platform on this list, let us know and we'll get it added!
   #
   platforms:
-  - name: EL
-    versions:
+  #- name: EL
+  #  versions:
   #  - all
   #  - 5
-     - 6
+  #  - 6
   #  - 7
   #- name: GenericUNIX
   #  versions:
@@ -65,14 +65,14 @@ galaxy_info:
   #  - 9.1
   #  - 9.1
   #  - 9.2
-  #- name: Ubuntu
-  #  versions:
+  - name: Ubuntu
+    versions:
   #  - all
   #  - lucid
   #  - maverick
   #  - natty
   #  - oneiric
-  #  - precise
+    - precise
   #  - quantal
   #  - raring
   #  - saucy
