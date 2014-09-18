@@ -21,9 +21,9 @@
   - include: section_02.yml
     tags: section2
 
-  # - include: section_03.yml
-  #   tags: section3
-  #
+  - include: section_03.yml
+    tags: section3
+
   # - include: section_04.yml
   #   tags: section4
   #
