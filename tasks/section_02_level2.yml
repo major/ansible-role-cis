@@ -23,7 +23,7 @@
         owner=root
         state=present
         insertafter=EOF
-        create=True
+        create=yes
     sudo: yes
     notify:
       - Update depmod
@@ -39,7 +39,7 @@
         owner=root
         state=present
         insertafter=EOF
-        create=True
+        create=yes
     sudo: yes
     notify:
       - Update depmod
@@ -55,7 +55,7 @@
         owner=root
         state=present
         insertafter=EOF
-        create=True
+        create=yes
     sudo: yes
     notify:
       - Update depmod
@@ -71,7 +71,7 @@
         owner=root
         state=present
         insertafter=EOF
-        create=True
+        create=yes
     sudo: yes
     notify:
       - Update depmod
@@ -87,7 +87,7 @@
         owner=root
         state=present
         insertafter=EOF
-        create=True
+        create=yes
     sudo: yes
     notify:
       - Update depmod
@@ -103,7 +103,7 @@
         owner=root
         state=present
         insertafter=EOF
-        create=True
+        create=yes
     sudo: yes
     notify:
       - Update depmod
@@ -119,7 +119,7 @@
         owner=root
         state=present
         insertafter=EOF
-        create=True
+        create=yes
     sudo: yes
     notify:
       - Update depmod
