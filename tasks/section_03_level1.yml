@@ -42,7 +42,7 @@
       mode=0400
     sudo: yes
     tags:
-      - scored 
+      - scored
       - section3.2
 
   - name: 3.3 Set Boot Loader Password (Scored)
