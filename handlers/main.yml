@@ -23,3 +23,7 @@
 
   - name: Reload sshd
     command: /etc/init.d/sshd reload
+
+  - name: Update depmod
+    command: /sbin/depmod
+    sudo: yes
