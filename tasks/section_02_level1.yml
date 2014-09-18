@@ -118,7 +118,7 @@
       - scored
       
   - name: 2.17 Set sticky bit on all world-writeable directories (Scored)
-    debug: msg="*** May be too destructive -- see notes"
+    debug: msg="*** Too destructive"
     tags:
       - scored
       - section2.17
