@@ -16,7 +16,7 @@
 #
 
   - name: 2.18  Disable Mounting of cramfs Filesystems (Not Scored)
-    lineinfile:
+    lineinfile: >
         dest=/etc/modprobe.d/CIS.conf
         line="install cramfs /bin/true"
         regexp="^install cramfs /bin/true"
@@ -32,7 +32,7 @@
       - section2.18
       
   - name: 2.19  Disable Mounting of freevxfs Filesystems (Not Scored)
-    lineinfile:
+    lineinfile: >
         dest=/etc/modprobe.d/CIS.conf
         line="install freevxfs /bin/true"
         regexp="^install freevxfs /bin/true"
@@ -48,7 +48,7 @@
       - section2.19
       
   - name: 2.20  Disable Mounting of jffs2 Filesystems (Not Scored)
-    lineinfile:
+    lineinfile: >
         dest=/etc/modprobe.d/CIS.conf
         line="install jffs2 /bin/true"
         regexp="^install jffs2 /bin/true"
@@ -64,7 +64,7 @@
       - section2.20
       
   - name: 2.21  Disable Mounting of hfs Filesystems (Not Scored)
-    lineinfile:
+    lineinfile: >
         dest=/etc/modprobe.d/CIS.conf
         line="install hfs /bin/true"
         regexp="^install hfs /bin/true"
@@ -80,7 +80,7 @@
       - section2.21
       
   - name: 2.22  Disable Mounting of hfsplus Filesystems (Not Scored)
-    lineinfile:
+    lineinfile: >
         dest=/etc/modprobe.d/CIS.conf
         line="install hfsplus /bin/true"
         regexp="^install hfsplus /bin/true"
@@ -96,7 +96,7 @@
       - section2.22
       
   - name: 2.23  Disable Mounting of squashfs Filesystems (Not Scored)
-    lineinfile:
+    lineinfile: >
         dest=/etc/modprobe.d/CIS.conf
         line="install squashfs /bin/true"
         regexp="^install squashfs /bin/true"
@@ -112,7 +112,7 @@
       - section2.23
       
   - name: 2.24  Disable Mounting of udf Filesystems (Not Scored)
-    lineinfile:
+    lineinfile: >
         dest=/etc/modprobe.d/CIS.conf
         line="install udf /bin/true"
         regexp="^install udf /bin/true"
