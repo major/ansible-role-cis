@@ -15,18 +15,18 @@
 #   limitations under the License.
 #
 
-  - name: 4.5 Activate AppArmor (Scored) - modify grub menu
-    shell: sed -i -e 's/apparmor=0\s*//g' /boot/grub/menu.lst
-    sudo: yes
-    tags:
-      - scored
-      - section4.5
-
   - name: 4.5 Activate AppArmor (Scored) - install apparmor-utils
     action: apt pkg={{item}} state=latest
     with_items:
       - apparmor
       - apparmor-utils
+    sudo: yes
+    tags:
+      - scored
+      - section4.5
+
+  - name: 4.5 Activate AppArmor (Scored) - modify grub menu
+    shell: sed -i -e 's/apparmor=0\s*//g' /boot/grub/menu.lst
     sudo: yes
     tags:
       - scored
