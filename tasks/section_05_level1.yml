@@ -56,7 +56,7 @@
     tags:
       - scored
       - section5.1
-      - section5.1.3
+      - section5.1.3 
 
   - name: 5.1.4 Ensure talk server is not enabled (Scored)
     shell: sed -i -re '/^\s*(talk|ntalk)/ s/^(.*)$/#\1/g' /etc/inetd.conf
