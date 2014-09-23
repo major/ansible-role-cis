@@ -19,6 +19,7 @@
     apt: >
       pkg=xserver-xorg-core*
       state=absent
+      purge=yes
     sudo: yes
     tags:
       - scored
@@ -141,6 +142,7 @@
     apt: >
       pkg=slapd
       state=absent
+      purge=yes
     sudo: yes
     tags:
       - notscored
@@ -372,6 +374,7 @@
     apt: >
       pkg=biosdevname
       state=absent
+      purge=yes
     sudo: yes
     tags:
       - scored
