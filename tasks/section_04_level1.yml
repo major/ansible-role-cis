@@ -38,7 +38,7 @@
       - section4.1
 
   - name: 4.1 Restrict Core Dumps (Scored) - via apt
-    action: apt pkg={{item}} state=absent
+    action: apt pkg={{item}} state=absent purge=yes
     with_items:
       - whoopsie
       - apport
@@ -64,8 +64,24 @@
       - scored
       - section4.3
 
-  - name: 4.4 Disable Prelink (Scored)
-    apt: pkg=prelink state=absent
+  - name: 4.4 Disable Prelink (Scored) - check for prelink binary
+    stat: path=/usr/sbin/prelink
+    register: prelink_binary
+    tags:
+      - scored
+      - section 4.4
+
+  - name: 4.4 Disable Prelink (Scored) - via prelink -ua command
+    command: /usr/sbin/prelink -ua
+    sudo: yes
+    when:
+      - prelink_binary.stat.exists
+    tags:
+      - scored
+      - section4.4
+
+  - name: 4.4 Disable Prelink (Scored) - via apt
+    apt: pkg=prelink state=absent purge=yes
     sudo: yes
     tags:
       - scored

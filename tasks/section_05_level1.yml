@@ -16,7 +16,7 @@
 #
 
   - name: 5.1.1 Ensure NIS is not installed (Scored)
-    apt: pkg=nis state=absent
+    apt: pkg=nis state=absent purge=yes
     sudo: yes
     tags:
       - scored
@@ -27,7 +27,7 @@
     stat: path=/etc/inetd.conf
     register: inetd_conf
     tags:
-      - section 5.1
+      - section5.1
       - section5.1.2
       - section5.1.4
       - section5.1.6
@@ -48,7 +48,7 @@
       - section5.1.2
       
   - name: 5.1.3 Ensure rsh client is not installed (Scored)
-    action: apt pkg={{item}} state=absent
+    action: apt pkg={{item}} state=absent purge=yes
     with_items:
       - rsh-client
       - rsh-reload-client
@@ -68,7 +68,7 @@
       - section5.1.4
       
   - name: 5.1.5 Ensure talk client is not installed (Scored)
-    apt: pkg=talk state=absent
+    apt: pkg=talk state=absent purge=yes
     sudo: yes
     tags:
       - scored
