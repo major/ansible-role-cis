@@ -124,7 +124,7 @@
       - section2.17
       
   - name: 2.25 Disable Automounting (Scored)
-    action: apt pkg={{item}} state=absent
+    action: apt pkg={{item}} state=absent purge=yes
     with_items:
       - autofs
       - autofs5
