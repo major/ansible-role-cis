@@ -3,6 +3,8 @@ CIS
 
 This role can be used to audit or remediate a host against the Center for Internet Security (CIS) security benchmarks.
 
+*Warning for i386: Please note that this playbook makes an assumption of x86_64 architecture on the target hosts.  While it may work for i386 architecture please be aware that gaps may exist that should be addressed in order to ensure full CIS compliance.*
+
 *Disclaimer: This project has no affiliation with CIS.  The role and its contents have not been reviewed or endorsed by CIS.*
 
 Requirements
