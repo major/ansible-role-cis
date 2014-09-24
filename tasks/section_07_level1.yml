@@ -373,7 +373,7 @@
 
   - name: 7.7 Ensure Firewall is active (Scored)
     ufw: state=enabled
-    when: enable_iptables
+    when: enable_ufw
     tags:
       - scored
       - section7.7
