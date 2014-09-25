@@ -69,7 +69,7 @@
     register: prelink_binary
     tags:
       - scored
-      - section 4.4
+      - section4.4
 
   - name: 4.4 Disable Prelink (Scored) - via prelink -ua command
     command: /usr/sbin/prelink -ua

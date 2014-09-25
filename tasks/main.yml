@@ -30,9 +30,9 @@
   - include: section_05.yml
     tags: section5
 
-  # - include: section_06.yml
-  #   tags: section6
-  #
+  - include: section_06.yml
+    tags: section6
+
   # - include: section_07.yml
   #   tags: section7
   #
