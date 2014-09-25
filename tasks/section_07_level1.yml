@@ -15,22 +15,27 @@
 #   limitations under the License.
 #
 
-  - name: 7.1.1 Disable IP Forwarding (Scored)
+  - name: 7.1.1 Disable IP Forwarding (Scored) - ip_forward
     sysctl: >
       name=net.ipv4.ip_forward
       value=0
       state=present
+      ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.1
       - section7.1.1
-      
+
   - name: 7.1.2 Disable Send Packet Redirects (Scored)
     sysctl: >
       name=net.ipv4.conf.all.send_redirects
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.1
@@ -42,6 +47,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.1
@@ -53,6 +60,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -64,6 +73,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -75,6 +86,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -86,6 +99,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -97,6 +112,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -108,6 +125,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -119,6 +138,8 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -130,6 +151,8 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -141,6 +164,8 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -152,6 +177,8 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -163,6 +190,8 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -174,6 +203,8 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -185,6 +216,8 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
@@ -196,6 +229,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - notscored
       - section7.3
@@ -207,6 +242,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - notscored
       - section7.3
@@ -218,6 +255,8 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - notscored
       - section7.3
@@ -229,6 +268,7 @@
       value=0
       state=present
       ignoreerrors=true
+    sudo: yes
     tags:
       - notscored
       - section7.3
@@ -240,6 +280,7 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
     when: disable_ipv6
     tags:
       - notscored
@@ -252,6 +293,7 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
     when: disable_ipv6
     tags:
       - notscored
@@ -264,6 +306,7 @@
       value=1
       state=present
       ignoreerrors=true
+    sudo: yes
     when: disable_ipv6
     tags:
       - notscored
@@ -287,6 +330,7 @@
       dest=/etc/hosts.allow
       regexp=^ALL
       line=ALL:{{ tcp_allow | default("ALL") }}
+    sudo: yes
     tags:
       - notscored
       - section7.4
@@ -296,6 +340,7 @@
     file: >
       path=/etc/hosts.allow
       mode=0644
+    sudo: yes
     tags:
       - scored
       - section7.4
@@ -307,6 +352,7 @@
       create=yes
       dest=/etc/hosts.deny
       line=ALL:ALL
+    sudo: yes
     tags:
       - notscored
       - section7.4
@@ -316,6 +362,7 @@
     file: >
       path=/etc/hosts.deny
       mode=0644
+    sudo: yes
     tags:
       - scored
       - section7.4
@@ -327,6 +374,7 @@
       create=yes
       dest=/etc/modprobe.d/CIS.conf
       line="install dccp /bin/true"
+    sudo: yes
     tags:
       - notscored
       - section7.5
@@ -338,6 +386,7 @@
       create=yes
       dest=/etc/modprobe.d/CIS.conf
       line="install sctp /bin/true"
+    sudo: yes
     tags:
       - notscored
       - section7.5
@@ -349,6 +398,7 @@
       create=yes
       dest=/etc/modprobe.d/CIS.conf
       line="install rds /bin/true"
+    sudo: yes
     tags:
       - notscored
       - section7.5
@@ -360,6 +410,7 @@
       create=yes
       dest=/etc/modprobe.d/CIS.conf
       line="install tipc /bin/true"
+    sudo: yes
     tags:
       - notscored
       - section7.5
@@ -374,6 +425,7 @@
   - name: 7.7 Ensure Firewall is active (Scored)
     ufw: state=enabled
     when: enable_ufw
+    sudo: yes
     tags:
       - scored
       - section7.7
