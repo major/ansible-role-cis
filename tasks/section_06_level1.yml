@@ -15,396 +15,367 @@
 #   limitations under the License.
 #
 
-  - name: 6.1.1 Enable anacron Daemon (Scored)
-    yum: >
-      name=cronie-anacron
-      state=present
+  - name: 6.1 Ensure the X Window system is not installed (Scored)
+    apt: >
+      pkg=xserver-xorg-core*
+      state=absent
+      purge=yes
+    sudo: yes
     tags:
       - scored
       - section6.1
-      - section6.1.1
+      
+  - name: 6.2 Ensure Avahi Server is not enabled (Scored) - check for avahi-daemon
+    stat: path=/etc/init.d/avahi-daemon
+    register: avahi_daemon_service
+    tags:
+      - scored
+      - section6.2
 
-  - name: 6.1.2 Enable crond Daemon (Scored)
+  - name: 6.2 Ensure Avahi Server is not enabled (Scored)
     service: >
-      name=crond
-      enabled=yes
-      state=started
-    tags:
-      - scored
-      - section6.1
-      - section6.1.2
-
-  - name: 6.1.3 Set User/Group Owner and Permission on /etc/anacrontab (Scored)
-    file: >
-      path=/etc/anacrontab
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.3
-
-  - name: 6.1.4 Set User/Group Owner and Permission on /etc/crontab (Scored)
-    file: >
-      path=/etc/crontab
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.4
-
-  - name: 6.1.5 Set User/Group Owner and Permission on /etc/cron.hourly (Scored)
-    file: >
-      path=/etc/cron.hourly
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.5
-
-  - name: 6.1.6 Set User/Group Owner and Permission on /etc/cron.daily  (Scored)
-    file: >
-      path=/etc/cron.daily
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.6
-
-  - name: 6.1.7 Set User/Group Owner and Permission on /etc/cron.weekly  (Scored)
-    file: >
-      path=/etc/cron.weekly
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.7
-
-  - name: 6.1.8 Set User/Group Owner and Permission on /etc/cron.monthly (Scored)
-    file: >
-      path=/etc/cron.monthly
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.8
-
-  - name: 6.1.9 Set User/Group Owner and Permission on /etc/cron.d (Scored)
-    file: >
-      path=/etc/cron.d
-      state=directory
-      owner=root
-      group=root
-      mode=0700
-    tags:
-      - scored
-      - section6.1
-      - section6.1.9
-
-  - name: 6.1.10 Restrict at Daemon (Scored)
-    file: >
-      path=/etc/at.deny
-      state=absent
-    tags:
-      - scored
-      - section6.1
-      - section6.1.10
-
-  - name: 6.1.10 Restrict at Daemon (Scored)
-    file: >
-      path=/etc/at.allow
-      state=touch
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.10
-
-  - name: 6.1.11 Restrict at/cron to Authorized Users (Scored)
-    file: >
-      path=/etc/cron.deny
-      state=absent
-    tags:
-      - scored
-      - section6.1
-      - section6.1.11
-
-  - name: 6.1.11 Restrict at/cron to Authorized Users (Scored)
-    file: >
-      path=/etc/cron.allow
-      state=touch
-      owner=root
-      group=root
-      mode=0600
-    tags:
-      - scored
-      - section6.1
-      - section6.1.11
-
-  - name: 6.2.1 Set SSH Protocol to 2 (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^Protocol " line="Protocol 2"
-    notify: Reload sshd
+      name=avahi-daemon
+      state=stopped
+      enabled=no
+    ignore_errors: yes
+    sudo: yes
+    when: avahi_daemon_service.stat.exists
     tags:
       - scored
       - section6.2
-      - section6.2.1
-
-  - name: 6.2.2 Set LogLevel to INFO (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^LogLevel "
-      line="LogLevel INFO"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.2
-
-  - name: 6.2.3 Set Permissions on /etc/ssh/sshd_config (Scored)
-    file: >
-      path=/etc/ssh/sshd_config
-      owner=root
-      group=root
-      mode=0600
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.3
-
-  - name: 6.2.4 Disable SSH X11 Forwarding (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^X11Forwarding "
-      line="X11Forwarding no"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.4
-
-  - name: 6.2.5 Set SSH MaxAuthTries to 4 or Less (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^MaxAuthTries "
-      line="MaxAuthTries 4"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.5
-
-  - name: 6.2.6 Set SSH IgnoreRhosts to Yes (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^IgnoreRhosts "
-      line="IgnoreRhosts yes"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.6
-
-  - name: 6.2.7 Set SSH HostbasedAuthentication to No (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^HostbasedAuthentication "
-      line="HostbasedAuthentication no"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.7
-
-  - name: 6.2.8 Disable SSH Root Login (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^PermitRootLogin "
-      line="PermitRootLogin no"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.8
-
-  - name: 6.2.9 Set SSH PermitEmptyPasswords to No (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^PermitEmptyPasswords "
-      line="PermitEmptyPasswords no"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.9
-
-  - name: 6.2.10 Do Not Allow Users to Set Environment Options (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^PermitUserEnvironment "
-      line="PermitUserEnvironment no"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.10
-
-  - name: 6.2.11 Use Only Approved Cipher in Counter Mode (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^Ciphers "
-      line="Ciphers aes128-ctr,aes192-ctr,aes256-ctr"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.11
-
-  - name: 6.2.12 Set Idle Timeout Interval for User Login (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^ClientAliveInterval "
-      line="ClientAliveInterval 300"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.12
-
-  - name: 6.2.12 Set Idle Timeout Interval for User Login (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^ClientAliveCountMax "
-      line="ClientAliveCountMax 0"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.12
-
-  - name: 6.2.13 Limit Access via SSH (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^AllowGroups "
-      line="AllowGroups {{ ssh_allow_groups }}"
-    when: ssh_allow_groups is defined
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.13
-
-  - name: 6.2.13 Limit Access via SSH (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config 
-      regexp="^AllowUsers "
-      line="AllowUsers {{ ssh_allow_users }}"
-    when: ssh_allow_users is defined
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.13
-
-  - name: 6.2.13 Limit Access via SSH (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^DenyGroups "
-      line="DenyGroups {{ ssh_deny_groups }}"
-    when: ssh_deny_groups is defined
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.13
-
-  - name: 6.2.13 Limit Access via SSH (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^DenyUsers "
-      line="DenyUsers {{ ssh_deny_users }}"
-    when: ssh_deny_users is defined
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.13
-
-  - name: 6.2.14 Set SSH Banner (Scored)
-    lineinfile: >
-      dest=/etc/ssh/sshd_config
-      regexp="^Banner "
-      line="Banner /etc/issue.net"
-    notify: Reload sshd
-    tags:
-      - scored
-      - section6.2
-      - section6.2.14
-
-  - name: 6.3.1 Upgrade Password Hashing Algorithm to SHA-512 (Scored)
-    shell: 'authconfig --test | grep hashing'
-    register: password_hash_algorithm
-    always_run: yes
-    tags:
-      - scored
-      - section6.3
-      - section6.3.1
-
-  - name: 6.3.1 Upgrade Password Hashing Algorithm to SHA-512 (Scored)
-    shell: authconfig --passalgo=sha512 --update
-    when: '"sha512" not in password_hash_algorithm.stdout'
-    tags:
-      - scored
-      - section6.3
-      - section6.3.1
-
-  - name: 6.3.2 - 6.3.4 Configure PAM (Scored)
-    copy: >
-      src=etc/pam.d/system-auth
-      dest=/etc/pam.d/system-auth
-    tags:
-      - scored
-      - section6.3
-      - section6.3.2
-      - section6.3.3
-      - section6.3.4
-
-  - name: 6.3.2 - 6.3.4 Configure PAM (Scored)
-    copy: >
-      src=etc/pam.d/password-auth
-      dest=/etc/pam.d/password-auth
-    tags:
-      - scored
-      - section6.3
-      - section6.3.2
-      - section6.3.3
-      - section6.3.4
-
-  - name: 6.4 Restrict root login to system console (Not Scored)
-    debug: msg="Too restrictive for most environments."
+      
+  - name: 6.3 Ensure print server is not enabled (Not Scored) - check for cups_service
+    stat: path=/etc/init.d/cups
+    register: cups_service
     tags:
       - notscored
+      - section6.3
+
+  - name: 6.3 Ensure print server is not enabled (Not Scored)
+    service: >
+      name=cups
+      state=stopped
+      enabled=no
+    ignore_errors: yes
+    sudo: yes
+    when: cups_service.stat.exists
+    tags:
+      - notscored
+      - section6.3
+          
+  - name: 6.4 Ensure DHCP Server is not enabled (Scored) - check for isc-dhcp-server
+    stat: path=/etc/init.d/isc-dhcp-server
+    register: isc_dhcp_server_service
+    tags:
+      - scored
       - section6.4
 
-  - name: 6.5 Restrict Access to the su Command (Scored)
-    copy: >
-      src=etc/pam.d/su
-      dest=/etc/pam.d/su
+  - name: 6.4 Ensure DHCP Server is not enabled (Scored) - check for isc-dhcp-server6
+    stat: path=/etc/init.d/isc_dhcp_service6
+    register: isc_dhcp_server6_service
+    tags:
+      - scored
+      - section6.4
+
+  - name: 6.4 Ensure DHCP Server is not enabled (Scored) - ipv4
+    service: >
+      name=isc-dhcp-server
+      state=stopped
+      enabled=no
+    ignore_errors: yes
+    sudo: yes
+    when: isc_dhcp_server_service.stat.exists
+    tags:
+      - scored
+      - section6.4
+
+  - name: 6.4 Ensure DHCP Server is not enabled (Scored) - ipv6
+    service: >
+      name=isc-dhcp-server6
+      state=stopped
+      enabled=no
+    ignore_errors: yes
+    sudo: yes
+    when: isc_dhcp_server6_service.stat.exists
+    tags:
+      - scored
+      - section6.4
+
+  - name: 6.5 Configure Network Time Protocol (NTP) (Scored) - via apt
+    apt: >
+      pkg=ntp
+      state=latest
+    sudo: yes
     tags:
       - scored
       - section6.5
+  
+  - name: 6.5 Configure Network Time Protocol (NTP) (Scored) - enable service
+    service: >
+      name=ntp
+      state=started
+      enabled=yes
+    sudo: yes
+    tags:
+      - scored
+      - section6.5
+      
+  - name: 6.5 Configure Network Time Protocol (NTP) (Scored) - via ntp.conf
+    lineinfile: >
+        dest=/etc/ntp.conf
+        line="{{ item.line }}"
+        regexp="{{ item.regexp }}"
+        owner=root
+        state=present
+        insertafter=EOF
+        create=yes
+    with_items:
+      - { regexp: '^restrict -4', line: 'restrict -4 default kod nomodify notrap nopeer noquery'}
+      - { regexp: '^restrict -6', line: 'restrict -6 default kod nomodify notrap nopeer noquery'}
+      - { regexp: '^server', line: 'server pool.ntp.org'}
+    sudo: yes
+    tags:
+      - scored
+      - section6.5
+
+  - name: 6.6 Ensure LDAP is not enabled (Not Scored)
+    apt: >
+      pkg=slapd
+      state=absent
+      purge=yes
+    sudo: yes
+    tags:
+      - notscored
+      - section6.6
+
+  - name: 6.7 Ensure NFS and RPC are not enabled (Not Scored) - check for rpcbind-boot
+    stat: path=/etc/init.d/rpcbind-boot
+    register: rpcbind_boot_service
+    tags:
+      - notscored
+      - section6.7
+
+  - name: 6.7 Ensure NFS and RPC are not enabled (Not Scored) - check for nfs-kernel-server
+    stat: path=/etc/init.d/nfs-kernel-server
+    register: nfs_kernel_server_service
+    tags:
+      - notscored
+      - section6.7
+      
+  - name: 6.7 Ensure NFS and RPC are not enabled (Not Scored) - rpcbind service
+    service: >
+      name=rpcbind-boot
+      state=stopped
+      enabled=no
+    when:
+      - rpcbind_boot_service.stat.exists
+      - not nfs
+    sudo: yes
+    tags:
+      - notscored
+      - section6.7
+     
+  - name: 6.7 Ensure NFS and RPC are not enabled (Not Scored) - nfs-kernel-server service
+    service: >
+      name=nfs-kernel-server
+      state=stopped
+      enabled=no
+    when:
+      - nfs_kernel_server_service.stat.exists
+      - not nfs
+    sudo: yes
+    tags:
+      - notscored
+      - section6.7
+
+  - name: 6.8 Ensure DNS Server is not enabled (Not Scored) - check for bind9
+    stat: path=/etc/init.d/bind9
+    register: bind9_service
+    tags:
+      - notscored
+      - section6.8
+
+  - name: 6.8 Ensure DNS Server is not enabled (Not Scored) - bind9 service
+    service: >
+      name=bind9
+      state=stopped
+      enabled=no
+    when:
+      - bind9_service.stat.exists
+      - not dns
+    sudo: yes
+    tags:
+      - notscored
+      - section6.8
+
+  - name: 6.9 Ensure FTP Server is not enabled (Not Scored) - check for vsftpd
+    stat: path=/etc/init.d/vsftpd
+    register: vsftpd_service
+    tags:
+      - notscored
+      - section6.9
+
+  - name: 6.9 Ensure FTP Server is not enabled (Not Scored) - vsftpd service
+    service: >
+      name=vsftpd
+      state=stopped
+      enabled=no
+    when:
+      - vsftpd_service.stat.exists
+      - not ftp
+    sudo: yes
+    tags:
+      - notscored
+      - section6.9
+
+  - name: 6.10 Ensure HTTP Server is not enabled (Not Scored) - check for apache2
+    stat: path=/etc/init.d/apache2
+    register: apache2_service
+    tags:
+      - notscored
+      - section6.10
+
+  - name: 6.10 Ensure HTTP Server is not enabled (Not Scored) - apache2 service
+    service: >
+      name=apache2
+      state=stopped
+      enabled=no
+    when:
+      - apache2_service.stat.exists
+      - not httpd
+    sudo: yes
+    tags:
+      - notscored
+      - section6.10
+
+  - name: 6.11 Ensure IMAP and POP server is not enabled (Not Scored) - check for dovecot
+    stat: path=/etc/init.d/dovecot
+    register: dovecot_service
+    tags:
+      - notscored
+      - section6.11
+
+  - name: 6.11 Ensure IMAP and POP server is not enabled (Not Scored) - dovecot service
+    service: >
+      name=dovecot
+      state=stopped
+      enabled=no
+    when:
+      - dovecot_service.stat.exists
+      - not dovecot
+    sudo: yes
+    tags:
+      - notscored
+      - section6.11
+      
+  - name: 6.12 Ensure Samba is not enabled (Not Scored) - check for smbd
+    stat: path=/etc/init.d/smbd
+    register: smbd_service
+    tags:
+      - notscored
+      - section6.12
+
+  - name: 6.12 Ensure Samba is not enabled (Not Scored) - smbd service
+    service: >
+      name=smbd
+      state=stopped
+      enabled=no
+    when:
+      - smbd_service.stat.exists
+      - not samba
+    sudo: yes
+    tags:
+      - notscored
+      - section6.12
+
+  - name: 6.13 Ensure HTTP Proxy Server is not enabled (Not Scored) - check for squid3
+    stat: path=/etc/init.d/squid3
+    register: squid3_service
+    tags:
+      - notscored
+      - section6.13
+
+  - name: 6.13 Ensure HTTP Proxy Server is not enabled (Not Scored) - squid3 service
+    service: >
+      name=squid3
+      state=stopped
+      enabled=no
+    when:
+      - squid3_service.stat.exists
+      - not squid
+    sudo: yes
+    tags:
+      - notscored
+      - section6.13
+
+  - name: 6.14 Ensure SNMP Server is not enabled (Not Scored) - check for snmpd
+    stat: path=/etc/init.d/snmpd
+    register: snmpd_service
+    tags:
+      - notscored
+      - section6.14
+
+  - name: 6.14 Ensure SNMP Server is not enabled (Not Scored) - snmpd service
+    service: >
+      name=snmpd
+      state=stopped
+      enabled=no
+    when:
+      - snmpd_service.stat.exists
+      - not snmp
+    sudo: yes
+    tags:
+      - notscored
+      - section6.14
+
+  - name: 6.15 Configure Mail Transfer Agent for Local-Only Mode (Scored) - via apt
+    apt: >
+      name=postfix
+      state=present
+    sudo: yes
+    tags:
+      - scored
+      - section6.15
+
+  - name: 6.15 Configure Mail Transfer Agent for Local-Only Mode (Scored) - via main.cf
+    lineinfile: >
+      backup=yes 
+      state=present 
+      dest=/etc/postfix/main.cf
+      backrefs=yes
+      regexp="^inet_interfaces"
+      line="inet_interfaces = localhost"
+    sudo: yes
+    ignore_errors: yes
+    tags:
+      - scored
+      - section6.15
+
+  - name: 6.16 Ensure rsync service is not enabled (Scored) - check for rsync
+    stat: path=/etc/init.d/rsync
+    register: rsync_service
+    tags:
+      - scored
+      - section6.16
+
+  - name: 6.16 Ensure rsync service is not enabled (Scored) - rsync service
+    service: >
+      name=rsync
+      state=stopped
+      enabled=no
+    when:
+      - rsync_service.stat.exists
+    sudo: yes
+    tags:
+      - scored
+      - section6.16
+      
+  - name: 6.17 Ensure Biosdevname is not enabled (Scored)
+    apt: >
+      pkg=biosdevname
+      state=absent
+      purge=yes
+    sudo: yes
+    tags:
+      - scored
+      - section6.17
