@@ -15,7 +15,7 @@
 #   limitations under the License.
 #
 
-  - name: 7.1.1 Disable IP Forwarding (Scored) - ip_forward
+  - name: 7.1.1 Disable IP Forwarding (Scored)
     sysctl: >
       name=net.ipv4.ip_forward
       value=0
@@ -30,23 +30,13 @@
 
   - name: 7.1.2 Disable Send Packet Redirects (Scored)
     sysctl: >
-      name=net.ipv4.conf.all.send_redirects
-      value=0
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    notify: Perform route cache flush
-    tags:
-      - scored
-      - section7.1
-      - section7.1.2      
-
-  - name: 7.1.2 Disable Send Packet Redirects (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.send_redirects
-      value=0
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.send_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.send_redirects', value: 0, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -56,23 +46,13 @@
 
   - name: 7.2.1 Disable Source Routed Packet Acceptance (Scored)
     sysctl: >
-      name=net.ipv4.conf.all.accept_source_route
-      value=0
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    notify: Perform route cache flush
-    tags:
-      - scored
-      - section7.2
-      - section7.2.1
-
-  - name: 7.2.1 Disable Source Routed Packet Acceptance (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.accept_source_route
-      value=0
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.accept_source_route', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.accept_source_route', value: 0, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -82,23 +62,13 @@
 
   - name: 7.2.2 Disable ICMP Redirect Acceptance (Scored)
     sysctl: >
-      name=net.ipv4.conf.all.accept_redirects
-      value=0
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    notify: Perform route cache flush
-    tags:
-      - scored
-      - section7.2
-      - section7.2.2
-
-  - name: 7.2.2 Disable ICMP Redirect Acceptance (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.accept_redirects
-      value=0
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.accept_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.accept_redirects', value: 0, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -108,23 +78,13 @@
 
   - name: 7.2.3 Disable Secure ICMP Redirect Acceptance (Scored)
     sysctl: >
-      name=net.ipv4.conf.all.secure_redirects
-      value=0
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    notify: Perform route cache flush
-    tags:
-      - scored
-      - section7.2
-      - section7.2.3
-
-  - name: 7.2.3 Disable Secure ICMP Redirect Acceptance (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.secure_redirects
-      value=0
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.secure_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.secure_redirects', value: 0, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -134,23 +94,13 @@
 
   - name: 7.2.4 Log Suspicious Packets (Scored)
     sysctl: >
-      name=net.ipv4.conf.all.log_martians
-      value=1
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    notify: Perform route cache flush
-    tags:
-      - scored
-      - section7.2
-      - section7.2.4
-
-  - name: 7.2.4 Log Suspicious Packets (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.log_martians
-      value=1
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.log_martians', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.log_martians', value: 1, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -186,23 +136,13 @@
 
   - name: 7.2.7 Enable RFC-recommended Source Route Validation (Scored)
     sysctl: >
-      name=net.ipv4.conf.all.rp_filter
-      value=1
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    notify: Perform route cache flush
-    tags:
-      - scored
-      - section7.2
-      - section7.2.7
-
-  - name: 7.2.7 Enable RFC-recommended Source Route Validation (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.rp_filter
-      value=1
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.rp_filter', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.rp_filter', value: 1, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -225,23 +165,13 @@
 
   - name: 7.3.1 Disable IPv6 Router Advertisements (Not Scored)
     sysctl: >
-      name=net.ipv6.conf.all.accept_ra
-      value=0
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    notify: Perform route cache flush
-    tags:
-      - notscored
-      - section7.3
-      - section7.3.1
-
-  - name: 7.3.1 Disable IPv6 Router Advertisements (Not Scored)
-    sysctl: >
-      name=net.ipv6.conf.default.accept_ra
-      value=0
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv6.conf.all.accept_ra', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.default.accept_ra', value: 0, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -251,10 +181,13 @@
 
   - name: 7.3.2 Disable IPv6 Redirect Acceptance (Not Scored)
     sysctl: >
-      name=net.ipv6.conf.all.accept_redirects
-      value=0
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv6.conf.all.accept_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.default.accept_redirects', value: 0, state: present, ignoreerrors: true }
     sudo: yes
     notify: Perform route cache flush
     tags:
@@ -262,52 +195,18 @@
       - section7.3
       - section7.3.2
 
-  - name: 7.3.2 Disable IPv6 Redirect Acceptance (Not Scored)
-    sysctl: >
-      name=net.ipv6.conf.default.accept_redirects
-      value=0
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    tags:
-      - notscored
-      - section7.3
-      - section7.3.2
-
   - name: 7.3.3 Disable IPv6 (Not Scored)
     sysctl: >
-      name=net.ipv6.conf.all.disable_ipv6
-      value=1
-      state=present
-      ignoreerrors=true
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv6.conf.all.disable_ipv6', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.default.disable_ipv6', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.lo.disable_ipv6', value: 1, state: present, ignoreerrors: true }
     sudo: yes
-    when: disable_ipv6
-    tags:
-      - notscored
-      - section7.3
-      - section7.3.3
-
-  - name: 7.3.3 Disable IPv6 (Not Scored)
-    sysctl: >
-      name=net.ipv6.conf.default.disable_ipv6
-      value=1
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    when: disable_ipv6
-    tags:
-      - notscored
-      - section7.3
-      - section7.3.3
-
-  - name: 7.3.3 Disable IPv6 (Not Scored)
-    sysctl: >
-      name=net.ipv6.conf.lo.disable_ipv6
-      value=1
-      state=present
-      ignoreerrors=true
-    sudo: yes
-    when: disable_ipv6
+    notify: Perform route cache flush
     tags:
       - notscored
       - section7.3
