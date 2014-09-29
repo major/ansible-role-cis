@@ -15,46 +15,26 @@
 #   limitations under the License.
 #
 
-  - name: 4.2.3 Disable Secure ICMP Redirect Acceptance (Scored)
-    sysctl: >
-      name=net.ipv4.conf.all.secure_redirects
-      value=0
-      state=present
-      ignoreerrors=true
+  - name: 4.5 Activate AppArmor (Scored) - install apparmor-utils
+    action: apt pkg={{item}} state=latest
+    with_items:
+      - apparmor
+      - apparmor-utils
+    sudo: yes
     tags:
       - scored
-      - section4.2
-      - section4.2.3
+      - section4.5
 
-  - name: 4.2.3 Disable Secure ICMP Redirect Acceptance (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.secure_redirects
-      value=0
-      state=present
-      ignoreerrors=true
+  - name: 4.5 Activate AppArmor (Scored) - modify grub menu
+    shell: sed -i -e 's/apparmor=0\s*//g' /boot/grub/menu.lst
+    sudo: yes
     tags:
       - scored
-      - section4.2
-      - section4.2.3
+      - section4.5
 
-  - name: 4.2.7 Enable RFC-recommended Source Route Validation (Scored)
-    sysctl: >
-      name=net.ipv4.conf.all.rp_filter
-      value=1
-      state=present
-      ignoreerrors=true
+  - name: 4.5 Activate AppArmor (Scored) - set profiles to enforce
+    shell: aa-enforce /etc/apparmor.d/*
+    sudo: yes
     tags:
       - scored
-      - section4.2
-      - section4.2.7
-
-  - name: 4.2.7 Enable RFC-recommended Source Route Validation (Scored)
-    sysctl: >
-      name=net.ipv4.conf.default.rp_filter
-      value=1
-      state=present
-      ignoreerrors=true
-    tags:
-      - scored
-      - section4.2
-      - section4.2.7
+      - section4.5

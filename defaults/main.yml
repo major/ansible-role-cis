@@ -1,10 +1,10 @@
-# Should we configure AIDE on the system? (CIS 1.3)
+# Should we configure AIDE on the system? (CIS 8.3)
 # Options:
 #   yes: install and configure AIDE
 #   no: do not install or configure AIDE
 configure_aide: yes
 
-# auditd (CIS 5.2)
+# auditd (CIS 8.1)
 # These are sensible defaults but you may change these to fit your system.
 action_mail_acct: "root"
 admin_space_left_action: "halt"
@@ -12,7 +12,11 @@ max_log_file: 100
 max_log_file_action: "keep_logs"
 space_left_action: "email"
 
-# rsyslog (5.1.6)
+# rsyslog destination (8.2.5)
+# Set to host to receive rsyslog messages
+# rsyslog_dest: host.domain.ext
+
+# rsyslog (8.2.6)
 # Options:
 #   yes: configure rsyslog to receive remote logs from other servers
 #   no: do not configure rsyslog to receive remote logs from other servers
@@ -29,8 +33,6 @@ dns: no
 dovecot: no
 ftp: no
 httpd: no
-ldap_client: no
-ldap_server: no
 nfs: no
 samba: no
 snmp: no
