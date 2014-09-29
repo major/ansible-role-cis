@@ -122,6 +122,7 @@
       
   - name: 6.5 Configure Network Time Protocol (NTP) (Scored) - via ntp.conf
     lineinfile: >
+        backup=yes
         dest=/etc/ntp.conf
         line="{{ item.line }}"
         regexp="{{ item.regexp }}"
@@ -346,6 +347,7 @@
       regexp="^inet_interfaces"
       line="inet_interfaces = localhost"
     sudo: yes
+    notify: Restart postfix
     ignore_errors: yes
     tags:
       - scored
@@ -354,6 +356,20 @@
   - name: 6.16 Ensure rsync service is not enabled (Scored) - check for rsync
     stat: path=/etc/init.d/rsync
     register: rsync_service
+    tags:
+      - scored
+      - section6.16
+
+  - name: 6.16 Ensure rsync service is not enabled (Scored) - via default
+    lineinfile: >
+      backup=yes 
+      state=present 
+      dest=/etc/default/rsync
+      backrefs=yes
+      regexp="^RSYNC_ENABLE"
+      line="RSYNC_ENABLE=false"
+    sudo: yes
+    ignore_errors: yes
     tags:
       - scored
       - section6.16

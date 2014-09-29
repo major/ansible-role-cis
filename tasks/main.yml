@@ -36,8 +36,8 @@
   # - include: section_07.yml
   #   tags: section7
   #
-  # - include: section_08.yml
-  #   tags: section8
-  #
+  - include: section_08.yml
+    tags: section8
+
   # - include: section_09.yml
   #   tags: section9
