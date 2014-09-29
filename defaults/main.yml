@@ -41,26 +41,6 @@ squid: no
 #   no: don't adjust inactive account settings
 lock_inactive: no
 
-# Enable iptables (CIS 4.7)
-# You should check to see that your current iptables configuration in
-# /etc/sysconfig/iptables is configured properly so that you don't lose access
-# to your server when iptables is enabled.  If you're alreading using iptables,
-# then this setting won't affect you either way.
-# Options:
-#   yes: enable iptables and load the rules from /etc/sysconfig/iptables
-#   no: don't alter iptables whatsoever
-enable_iptables: no
-
-# Enable ip6tables (CIS 4.8)
-# You should check to see that your current ip6tables configuration in
-# /etc/sysconfig/ip6tables is configured properly so that you don't lose access
-# to your server when ip6tables is enabled.  If you're alreading using ip6tables,
-# then this setting won't affect you either way.
-# Options:
-#   yes: enable ip6tables and load the rules from /etc/sysconfig/ip6tables
-#   no: don't alter ip6tables whatsoever
-enable_ip6tables: no
-
 # Disable IPv6 (CIS 4.4.2)
 # It's recommended to configure IPv6 properly instead of disabling it entirely.
 # If your organization really doesn't use IPv6 at all, you could accept the
@@ -70,7 +50,7 @@ enable_ip6tables: no
 #   no: don't alter the IPv6 configuration
 disable_ipv6: no
 
-# SSH configurations (CIS Section 6.2)
+# SSH configurations (CIS Section 9.3)
 # Uncomment these variables and set them accordingly to have them applied. They
 # are not applied by default.
 #ssh_allow_groups:

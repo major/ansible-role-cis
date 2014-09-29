@@ -22,7 +22,7 @@
     command: /usr/sbin/prelink -ua
 
   - name: Reload sshd
-    command: /etc/init.d/sshd reload
+    command: /etc/init.d/ssh reload
 
   - name: Update depmod
     command: /sbin/depmod
