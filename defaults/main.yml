@@ -41,6 +41,9 @@ squid: no
 #   no: don't adjust inactive account settings
 lock_inactive: no
 
+# Enable ufw (CIS 7.7)
+enable_ufw: yes
+
 # Disable IPv6 (CIS 4.4.2)
 # It's recommended to configure IPv6 properly instead of disabling it entirely.
 # If your organization really doesn't use IPv6 at all, you could accept the
