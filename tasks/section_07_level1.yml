@@ -205,9 +205,9 @@
       - { name: 'net.ipv6.conf.all.disable_ipv6', value: 1, state: present, ignoreerrors: true }
       - { name: 'net.ipv6.conf.default.disable_ipv6', value: 1, state: present, ignoreerrors: true }
       - { name: 'net.ipv6.conf.lo.disable_ipv6', value: 1, state: present, ignoreerrors: true }
-    when: disable_ipv6
     sudo: yes
     notify: Perform route cache flush
+    when: disable_ipv6
     tags:
       - notscored
       - section7.3
