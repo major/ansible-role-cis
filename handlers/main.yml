@@ -16,14 +16,33 @@
 #
 
   - name: Reload auditd Rules
-    command: /usr/bin/pkill -HUP -P 1 auditd
+    command: /usr/bin/pkill -P 1-HUP auditd
+    sudo: yes
 
   - name: Reload prelinking
     command: /usr/sbin/prelink -ua
+    sudo: yes
 
   - name: Reload sshd
     command: /etc/init.d/sshd reload
+    sudo: yes
+
+  - name: Reload rsyslogd
+    command: pkill -HUP rsyslogd
+    sudo: yes
 
   - name: Update depmod
     command: /sbin/depmod
+    sudo: yes
+
+  - name: Update grub
+    command: /usr/sbin/update-grub
+    sudo: yes
+
+  - name: Perform route cache flush
+    sysctl: >
+      name=net.ipv4.route.flush
+      value=1
+      state=present
+      ignoreerrors=true
     sudo: yes
