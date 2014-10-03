@@ -90,6 +90,7 @@
       line="*.* @@{{ rsyslog_dest }}"
     sudo: yes
     when: rsyslog_dest is defined
+    notify: Reload rsyslogd
     tags:
       - scored
       - section8.2
@@ -102,6 +103,7 @@
       line="$ModLoad imtcp.so"
     sudo: yes
     when: rsyslog_host
+    notify: Reload rsyslogd
     tags:
       - notscored
       - section8.2
@@ -114,6 +116,7 @@
       line="$InputTCPServerRun 514"
     sudo: yes
     when: rsyslog_host
+    notify: Reload rsyslogd
     tags:
       - notscored
       - section8.2
