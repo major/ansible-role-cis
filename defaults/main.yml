@@ -22,6 +22,14 @@ space_left_action: "email"
 #   no: do not configure rsyslog to receive remote logs from other servers
 rsyslog_host: no
 
+# rsyslog files to manage permissions on by default (8.2.4)
+rsyslog_log_files:
+  - messages
+  - kern.log
+  - daemon.log
+  - syslog
+  - unused.log
+
 # ----------------------------------------------------------------------------
 # WARNING
 # THIS SECTION IS HAZARDOUS TO PRODUCTION SERVERS. SERIOUSLY.

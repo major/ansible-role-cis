@@ -76,12 +76,7 @@
       group=admin
       mode=0640
     sudo: yes
-    with_items:
-        - messages
-        - kern.log
-        - daemon.log
-        - syslog
-        - unused.log
+    with_items: rsyslog_log_files
     tags:
       - scored
       - section8.2
