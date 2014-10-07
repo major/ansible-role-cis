@@ -52,38 +52,14 @@
 
   - name: 8.1.1.2 Disable System on Audit Log Full (Not Scored)
     lineinfile: >
-      state=present
-      dest=/etc/audit/auditd.conf
-      regexp="^space_left_action ="
-      line="space_left_action = {{ space_left_action }}"
-    sudo: yes
-    notify: Reload auditd Rules
-    tags:
-      - notscored
-      - section8.1
-      - section8.1.1
-      - section8.1.1.2
-
-  - name: 8.1.1.2 Disable System on Audit Log Full (Not Scored)
-    lineinfile: >
-      state=present
-      dest=/etc/audit/auditd.conf
-      regexp="^action_mail_acct ="
-      line="action_mail_acct = {{ action_mail_acct }}"
-    sudo: yes
-    notify: Reload auditd Rules
-    tags:
-      - notscored
-      - section8.1
-      - section8.1.1
-      - section8.1.1.2
-
-  - name: 8.1.1.2 Disable System on Audit Log Full (Not Scored)
-    lineinfile: >
-      state=present
-      dest=/etc/audit/auditd.conf
-      regexp="^admin_space_left_action ="
-      line="admin_space_left_action = {{ admin_space_left_action }}"
+      state="{{ item.state }}"
+      dest="{{ item.dest }}"
+      regexp="{{ item.regexp }}"
+      line="{{ item.line }}"
+    with_items:
+      - { state: present, dest: /etc/audit/auditd.conf, regexp: "^space_left_action =", line: "space_left_action = {{ space_left_action }}" }
+      - { state: present, dest: /etc/audit/auditd.conf, regexp: "^action_mail_acct =", line: "action_mail_acct = {{ action_mail_acct }}" }
+      - { state: present, dest: /etc/audit/auditd.conf, regexp: "^admin_space_left_action =", line: "admin_space_left_action = {{ admin_space_left_action }}" }
     sudo: yes
     notify: Reload auditd Rules
     tags:
