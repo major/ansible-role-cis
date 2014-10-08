@@ -120,8 +120,22 @@
       - section8.1.17
       - section8.1.18
 
+  - name: 8.1.12 Collect Use of Privileged Commands (Scored) - gather commands with elevated privileges  
+    shell: sh -c 'find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '\''{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged" }'\'''
+    register: privileged_commands
+    sudo: yes
+    tags:
+      - scored
+      - section8.1
+      - section8.1.12
+
+
   - name: 8.1.12 Collect Use of Privileged Commands (Scored)
-    shell: sh -c 'find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '\''{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged" }'\'' >> /etc/audit/audit.rules'
+    lineinfile:
+      state=present
+      dest=/etc/audit/audit.rules
+      line="{{ item }}"
+    with_items: privileged_commands.stdout_lines
     sudo: yes
     tags:
       - scored
