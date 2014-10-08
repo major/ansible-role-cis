@@ -15,4 +15,171 @@
 #   limitations under the License.
 #
 
-# CIS Section 8 has no Level 2 checks
+  - name: 8.1.2 Install and Enable auditd Service (Scored)
+    apt: >
+      pkg=auditd
+      state=present
+    sudo: yes
+    tags:
+      - scored
+      - section8.1
+      - section8.1.2
+
+  - name: 8.1.2 Install and Enable auditd Service (Scored)
+    service: >
+      name=auditd
+      enabled=yes
+      state=started
+    sudo: yes
+    tags:
+      - scored
+      - section8.1
+      - section8.1.2
+
+  - name: 8.1.1.1 Configure Audit Log Storage Size (Not Scored)
+    lineinfile: >
+      state=present
+      dest=/etc/audit/auditd.conf
+      line="max_log_file = {{ max_log_file }}"
+      regexp="^max_log_file"
+    sudo: yes
+    notify: Reload auditd Rules
+    tags:
+      - notscored
+      - section8.1
+      - section8.1.1
+      - section8.1.1.1 
+
+  - name: 8.1.1.2 Disable System on Audit Log Full (Not Scored)
+    lineinfile: >
+      state="{{ item.state }}"
+      dest="{{ item.dest }}"
+      regexp="{{ item.regexp }}"
+      line="{{ item.line }}"
+    with_items:
+      - { state: present, dest: /etc/audit/auditd.conf, regexp: "^space_left_action =", line: "space_left_action = {{ space_left_action }}" }
+      - { state: present, dest: /etc/audit/auditd.conf, regexp: "^action_mail_acct =", line: "action_mail_acct = {{ action_mail_acct }}" }
+      - { state: present, dest: /etc/audit/auditd.conf, regexp: "^admin_space_left_action =", line: "admin_space_left_action = {{ admin_space_left_action }}" }
+    sudo: yes
+    notify: Reload auditd Rules
+    tags:
+      - notscored
+      - section8.1
+      - section8.1.1
+      - section8.1.1.2
+
+  - name: 8.1.1.3 Keep All Auditing Information (Scored)
+    lineinfile: >
+      state=present
+      dest=/etc/audit/auditd.conf
+      regexp="^max_log_file_action ="
+      line="max_log_file_action = {{ max_log_file_action }}"
+    sudo: yes
+    notify: Reload auditd Rules
+    tags:
+      - scored
+      - section8.1
+      - section8.1.1
+      - section8.1.1.3
+
+  - name: 8.1.3 Enable Auditing for Processes That Start Prior to auditd (Scored)
+    lineinfile: >
+      state=present
+      dest=/boot/grub/grub.cfg
+      backrefs=yes
+      regexp="(^(\s*GRUB_CMDLINE_LINUX\s*=\s*\".*)(?<!audit=1)\")$"
+      line="\2 audit=1\""
+    sudo: yes
+    notify: Update grub
+    tags:
+      - scored
+      - section8.1
+      - section8.1.3
+
+  - name: 8.1.4-8.1.11 and 8.1.13-8.1.18 Configure auditd Rules (Scored)
+    copy: >
+      src=etc/audit/audit.rules
+      dest=/etc/audit/audit.rules
+    sudo: yes
+    notify: Reload auditd Rules
+    tags:
+      - scored
+      - section8.1
+      - section8.1.4
+      - section8.1.5
+      - section8.1.6
+      - section8.1.7
+      - section8.1.8
+      - section8.1.9
+      - section8.1.10
+      - section8.1.11
+      - section8.1.13
+      - section8.1.14
+      - section8.1.15
+      - section8.1.16
+      - section8.1.17
+      - section8.1.18
+
+  - name: 8.1.12 Collect Use of Privileged Commands (Scored) - gather commands with elevated privileges  
+    shell: sh -c 'find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '\''{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged" }'\'''
+    register: privileged_commands
+    sudo: yes
+    tags:
+      - scored
+      - section8.1
+      - section8.1.12
+
+
+  - name: 8.1.12 Collect Use of Privileged Commands (Scored)
+    lineinfile:
+      state=present
+      dest=/etc/audit/audit.rules
+      line="{{ item }}"
+    with_items: privileged_commands.stdout_lines
+    sudo: yes
+    tags:
+      - scored
+      - section8.1
+      - section8.1.12
+
+  - name: 8.3.1 Install AIDE (Scored)
+    apt: >
+      name=aide
+      state=present
+    sudo: yes
+    when: configure_aide
+    tags:
+      - scored
+      - section8.3
+      - section8.3.1
+
+  - name: 8.3.1 Install AIDE (Score) - aideinit
+    command: /usr/sbin/aideinit
+    sudo: yes
+    when: configure_aide
+    tags:
+      - scored
+      - section8.3
+      - section8.3.1
+
+  - name: 8.3.1 Install AIDE (Score) - copy aide db file
+    command: /bin/cp /var/lib/aide/aide.db.new /var/lib/aide/aide.db
+    sudo: yes
+    when: configure_aide
+    tags:
+      - scored
+      - section8.3
+      - section8.3.1
+
+  - name: 8.3.2 Implement Periodic Execution of File Integrity (Scored)
+    cron: >
+      name="Run AIDE (CIS 1.3.2)"
+      minute="0"
+      hour="5"
+      job="/usr/sbin/aide --check"
+    sudo: yes
+    when: configure_aide
+    tags:
+      - scored
+      - section8.3
+      - section8.3.2
