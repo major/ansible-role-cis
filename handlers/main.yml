@@ -43,6 +43,7 @@
     service: >
       name=postfix
       state=restarted
+    sudo: yes
 
   - name: Perform route cache flush
     sysctl: >
