@@ -33,14 +33,20 @@
   - include: section_06.yml
     tags: section6
 
-  # - include: section_07.yml
-  #   tags: section7
-  #
-  # - include: section_08.yml
-  #   tags: section8
-  #
-  # - include: section_09.yml
-  #   tags: section9
-  #
+  - include: section_07.yml
+    tags: section7
+
+  - include: section_08.yml
+    tags: section8
+
+  - include: section_09.yml
+    tags: section9
+
+  - include: section_10.yml
+    tags: section10
+
+  - include: section_11.yml
+    tags: section11
+
   - include: section_12.yml
     tags: section12

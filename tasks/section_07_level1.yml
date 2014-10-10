@@ -15,94 +15,317 @@
 #   limitations under the License.
 #
 
-  - name: 7.1.1 Set Password Expiration Days (Scored)
-    lineinfile: >
-      backup=yes 
-      state=present 
-      dest=/etc/login.defs
-      backrefs=yes
-      regexp="^PASS_MAX_DAYS\s+"
-      line="PASS_MAX_DAYS\t90"
+  - name: 7.1.1 Disable IP Forwarding (Scored)
+    sysctl: >
+      name=net.ipv4.ip_forward
+      value=0
+      state=present
+      ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.1
       - section7.1.1
 
-  - name: 7.1.2 Set Password Change Minimum Number of Days (Scored)
-    lineinfile: >
-      backup=yes 
-      state=present 
-      dest=/etc/login.defs
-      backrefs=yes
-      regexp="^PASS_MIN_DAYS\s+"
-      line="PASS_MIN_DAYS\t7"
+  - name: 7.1.2 Disable Send Packet Redirects (Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.send_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.send_redirects', value: 0, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.1
       - section7.1.2
 
-  - name: 7.1.3 Set Password Expiring Warning Days (Scored)
-    lineinfile: >
-      backup=yes 
-      state=present 
-      dest=/etc/login.defs
-      backrefs=yes
-      regexp="^PASS_WARN_AGE\s+"
-      line="PASS_WARN_AGE\t7"
-    tags:
-      - scored
-      - section7.1
-      - section7.1.3
-
-  - name: 7.2 Disable System Accounts (Scored) - preparation
-    shell: awk -F':' '($3<500 && $1!="root" && $1!="sync" && $1!="shutdown" && $1!="sync" && $1!="shutdown" && $1!="halt" && $7!="/sbin/nologin") { print $1 }' /etc/passwd
-    register: enabled_system_accounts
-    changed_when: false
+  - name: 7.2.1 Disable Source Routed Packet Acceptance (Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.accept_source_route', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.accept_source_route', value: 0, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
+      - section7.2.1
 
-  - name: 7.2 Disable System Accounts (Scored)
-    command: /usr/sbin/usermod -s /sbin/nologin {{ item }}
-    with_items: enabled_system_accounts.stdout_lines
+  - name: 7.2.2 Disable ICMP Redirect Acceptance (Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.accept_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.accept_redirects', value: 0, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
       - section7.2
+      - section7.2.2
 
-  - name: 7.3 Set Default Group for root Account (Scored)
-    user: >
-      name=root
-      group=root
+  - name: 7.2.3 Disable Secure ICMP Redirect Acceptance (Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.secure_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.secure_redirects', value: 0, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
     tags:
       - scored
+      - section7.2
+      - section7.2.3
+
+  - name: 7.2.4 Log Suspicious Packets (Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.log_martians', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.log_martians', value: 1, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
+    tags:
+      - scored
+      - section7.2
+      - section7.2.4
+
+  - name: 7.2.5 Enable Ignore Broadcast Requests (Scored)
+    sysctl: >
+      name=net.ipv4.icmp_echo_ignore_broadcasts
+      value=1
+      state=present
+      ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
+    tags:
+      - scored
+      - section7.2
+      - section7.2.5
+
+  - name: 7.2.6 Enable Bad Error Message Protection (Scored)
+    sysctl: >
+      name=net.ipv4.icmp_ignore_bogus_error_responses
+      value=1
+      state=present
+      ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
+    tags:
+      - scored
+      - section7.2
+      - section7.2.6
+
+  - name: 7.2.7 Enable RFC-recommended Source Route Validation (Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv4.conf.all.rp_filter', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv4.conf.default.rp_filter', value: 1, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
+    tags:
+      - scored
+      - section7.2
+      - section7.2.7
+
+  - name: 7.2.8 Enable TCP SYN Cookies (Scored)
+    sysctl: >
+      name=net.ipv4.tcp_syncookies
+      value=1
+      state=present
+      ignoreerrors=true
+    sudo: yes
+    notify: Perform route cache flush
+    tags:
+      - scored
+      - section7.2
+      - section7.2.8
+
+  - name: 7.3.1 Disable IPv6 Router Advertisements (Not Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv6.conf.all.accept_ra', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.default.accept_ra', value: 0, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
+    tags:
+      - notscored
       - section7.3
+      - section7.3.1
 
-  - name: 7.4 Set Default umask for Users (Scored)
-    lineinfile: 
+  - name: 7.3.2 Disable IPv6 Redirect Acceptance (Not Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv6.conf.all.accept_redirects', value: 0, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.default.accept_redirects', value: 0, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
+    tags:
+      - notscored
+      - section7.3
+      - section7.3.2
+
+  - name: 7.3.3 Disable IPv6 (Not Scored)
+    sysctl: >
+      name="{{ item.name }}"
+      value="{{ item.value }}"
+      state="{{ item.state }}"
+      ignoreerrors="{{ item.ignoreerrors }}"
+    with_items:
+      - { name: 'net.ipv6.conf.all.disable_ipv6', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.default.disable_ipv6', value: 1, state: present, ignoreerrors: true }
+      - { name: 'net.ipv6.conf.lo.disable_ipv6', value: 1, state: present, ignoreerrors: true }
+    sudo: yes
+    notify: Perform route cache flush
+    when: disable_ipv6
+    tags:
+      - notscored
+      - section7.3
+      - section7.3.3
+
+  - name: 7.4.1 Install TCP Wrappers (Scored)
+    apt: >
+      pkg=tcpd
+      state=present
+    sudo: yes
+    tags:
+      - scored
+      - section7.4
+      - section7.4.1
+
+  - name: 7.4.2 Create /etc/hosts.allow (Not Scored)
+    lineinfile: >
       state=present
       create=yes
-      dest=/etc/profile.d/cis.sh
-      line="umask 077"
-    ignore_errors: true
+      dest=/etc/hosts.allow
+      regexp=^ALL
+      line=ALL:{{ tcp_allow | default("ALL") }}
+    sudo: yes
     tags:
-      - scored
+      - notscored
       - section7.4
+      - section7.4.2
 
-  - name: Ensure that /etc/profile.d/cis.sh has correct owner, group and mode
-    file: 
-      path=/etc/profile.d/cis.sh 
-      owner=root
-      group=root
+  - name: 7.4.3 Verify Permissions on /etc/hosts.allow (Scored)
+    file: >
+      path=/etc/hosts.allow
       mode=0644
-    changed_when: false
+    sudo: yes
     tags:
       - scored
       - section7.4
-      
-  - name: 7.5 Lock Inactive User Accounts (Scored)
-    command: /usr/sbin/useradd -D -f 35
-    when: lock_inactive
+      - section7.4.3
+
+  - name: 7.4.4 Create /etc/hosts.deny (Not Scored)
+    lineinfile: >
+      state=present
+      create=yes
+      dest=/etc/hosts.deny
+      line=ALL:ALL
+    sudo: yes
+    tags:
+      - notscored
+      - section7.4
+      - section7.4.4
+
+  - name: 7.4.5 Verify Permissions on /etc/hosts.deny (Scored)
+    file: >
+      path=/etc/hosts.deny
+      mode=0644
+    sudo: yes
     tags:
       - scored
-      - section7.5
+      - section7.4
+      - section7.4.5
 
+  - name: 7.5.1 Disable DCCP (Not Scored)
+    lineinfile: >
+      state=present
+      create=yes
+      dest=/etc/modprobe.d/CIS.conf
+      line="install dccp /bin/true"
+    sudo: yes
+    tags:
+      - notscored
+      - section7.5
+      - section7.5.1
+
+  - name: 7.5.2 Disable SCTP (Not Scored)
+    lineinfile: >
+      state=present
+      create=yes
+      dest=/etc/modprobe.d/CIS.conf
+      line="install sctp /bin/true"
+    sudo: yes
+    tags:
+      - notscored
+      - section7.5
+      - section7.5.2
+
+  - name: 7.5.3 Disable RDS (Not Scored)
+    lineinfile: >
+      state=present
+      create=yes
+      dest=/etc/modprobe.d/CIS.conf
+      line="install rds /bin/true"
+    sudo: yes
+    tags:
+      - notscored
+      - section7.5
+      - section7.5.3
+
+  - name: 7.5.4 Disable TIPC (Not Scored)
+    lineinfile: >
+      state=present
+      create=yes
+      dest=/etc/modprobe.d/CIS.conf
+      line="install tipc /bin/true"
+    sudo: yes
+    tags:
+      - notscored
+      - section7.5
+      - section7.5.4
+
+  - name: 7.6 Deactivate Wireless Interfaces (Not Scored)
+    debug: msg="*** Not relevant."
+    tags:
+      - notscored
+      - section7.6
+
+  - name: 7.7 Ensure Firewall is active (Scored)
+    ufw: state=enabled
+    when: enable_ufw
+    sudo: yes
+    tags:
+      - scored
+      - section7.7
