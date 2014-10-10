@@ -30,6 +30,7 @@
       opts="nodev,nosuid,noexec"
     when: item.mount == "/tmp"
     with_items: ansible_mounts
+    sudo: yes
     tags:
       - scored
       - section2.2
@@ -51,6 +52,7 @@
       opts="bind"
     when: item.mount == "/tmp"
     with_items: ansible_mounts
+    sudo: yes
     tags:
       - scored
       - section2.6
@@ -82,6 +84,7 @@
       opts="nodev"
     when: item.mount == "/home"
     with_items: ansible_mounts
+    sudo: yes
     tags:
       - scored
       - section2.10
@@ -111,6 +114,7 @@
       state=mounted
       fstype="tmpfs"
       opts="nodev,nosuid,noexec"
+    sudo: yes
     tags:
       - section2.14
       - section2.15
@@ -128,7 +132,7 @@
     with_items:
       - autofs
       - autofs5
-    sudo:
+    sudo: yes
     tags:
       - scored
       - section2.25
