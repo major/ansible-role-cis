@@ -19,6 +19,7 @@
     file: >
       path=/etc/passwd
       mode=0644
+    sudo: yes
     tags:
       - scored
       - section12.1
@@ -27,6 +28,7 @@
     file: >
       path=/etc/shadow
       mode=0000
+    sudo: yes
     tags:
       - scored
       - section12.2
@@ -35,6 +37,7 @@
     file: >
       path=/etc/group
       mode=0644
+    sudo: yes
     tags:
       - scored
       - section12.3
@@ -44,6 +47,7 @@
       path=/etc/passwd
       owner=root
       group=root
+    sudo: yes
     tags:
       - scored
       - section12.4
@@ -53,6 +57,7 @@
       path=/etc/shadow
       owner=root
       group=shadow
+    sudo: yes
     tags:
       - scored
       - section12.5
@@ -62,12 +67,14 @@
       path=/etc/group
       owner=root
       group=root
+    sudo: yes
     tags:
       - scored
       - section12.6
 
   - name: 12.7 Find World Writable Files (Not Scored)
     shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002 -print"
+    sudo: yes
     when: verify_find
     tags:
       - notscored
@@ -75,6 +82,7 @@
 
   - name: 12.8 Find Un-owned Files and Directories (Scored)
     shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser -ls"
+    sudo: yes
     when: verify_find
     tags:
       - scored
@@ -82,6 +90,7 @@
 
   - name: 12.9 Find Un-grouped Files and Directories (Scored)
     shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup -ls"
+    sudo: yes
     when: verify_find
     tags:
       - scored
@@ -89,6 +98,7 @@
 
   - name: 12.10 Find SUID System Executables (Not Scored)
     shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000 -print"
+    sudo: yes
     register: suid
     when: verify_find
     tags:
@@ -97,6 +107,7 @@
 
   - name: 12.11 Find SGID System Executables (Not Scored)
     shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000 -print"
+    sudo: yes
     register: sgid
     when: verify_find
     tags:
