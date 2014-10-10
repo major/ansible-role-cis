@@ -1,0 +1,104 @@
+---
+#
+# Copyright 2014 Major Hayden
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+#
+
+  - name: 12.1 Verify Permissions on /etc/passwd (Scored)
+    file: >
+      path=/etc/passwd
+      mode=0644
+    tags:
+      - scored
+      - section12.1
+
+  - name: 12.2 Verify Permissions on /etc/shadow (Scored)
+    file: >
+      path=/etc/shadow
+      mode=0000
+    tags:
+      - scored
+      - section12.2
+
+  - name: 12.3 Verify Permissions on /etc/group (Scored)
+    file: >
+      path=/etc/group
+      mode=0644
+    tags:
+      - scored
+      - section12.3
+
+  - name: 12.4 Verify User/Group Ownership on /etc/passwd (Scored)
+    file: >
+      path=/etc/passwd
+      owner=root
+      group=root
+    tags:
+      - scored
+      - section12.4
+
+  - name: 12.5 Verify User/Group Ownership on /etc/shadow (Scored)
+    file: >
+      path=/etc/shadow
+      owner=root
+      group=shadow
+    tags:
+      - scored
+      - section12.5
+
+  - name: 12.6 Verify User/Group Ownership on /etc/group (Scored)
+    file: >
+      path=/etc/group
+      owner=root
+      group=root
+    tags:
+      - scored
+      - section12.6
+
+  - name: 12.7 Find World Writable Files (Not Scored)
+    shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002 -print"
+    when: verify_find
+    tags:
+      - notscored
+      - section12.7
+
+  - name: 12.8 Find Un-owned Files and Directories (Scored)
+    shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser -ls"
+    when: verify_find
+    tags:
+      - scored
+      - section12.8
+
+  - name: 12.9 Find Un-grouped Files and Directories (Scored)
+    shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup -ls"
+    when: verify_find
+    tags:
+      - scored
+      - section12.9
+
+  - name: 12.10 Find SUID System Executables (Not Scored)
+    shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000 -print"
+    register: suid
+    when: verify_find
+    tags:
+      - notscored
+      - section12.10
+
+  - name: 12.11 Find SGID System Executables (Not Scored)
+    shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000 -print"
+    register: sgid
+    when: verify_find
+    tags:
+      - notscored
+      - section12.11
