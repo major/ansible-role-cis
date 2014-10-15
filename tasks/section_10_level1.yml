@@ -86,6 +86,7 @@
       create=yes
       dest=/etc/profile.d/cis.sh
       line="umask 077"
+    sudo: yes
     ignore_errors: true
     tags:
       - scored
@@ -97,6 +98,7 @@
       owner=root
       group=root
       mode=0644
+    sudo: yes
     changed_when: false
     tags:
       - scored
@@ -109,6 +111,7 @@
       backrefs=yes
       regexp="^UMASK\s+"
       line="UMASK\t077"
+    sudo: yes
     ignore_errors: true
     tags:
       - scored
@@ -116,6 +119,7 @@
 
   - name: 10.5 Lock Inactive User Accounts (Scored)
     command: /usr/sbin/useradd -D -f 35
+    sudo: yes
     when: lock_inactive
     tags:
       - scored
