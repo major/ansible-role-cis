@@ -41,3 +41,12 @@
 
   - include: section_09.yml
     tags: section9
+
+  - include: section_10.yml
+    tags: section10
+
+  - include: section_11.yml
+    tags: section11
+
+  - include: section_12.yml
+    tags: section12

@@ -14,3 +14,13 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
+
+  - include: section_12_level1.yml
+    tags:
+      - section12
+      - level1
+
+  - include: section_12_level2.yml
+    tags:
+      - section12
+      - level2
