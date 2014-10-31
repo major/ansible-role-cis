@@ -16,7 +16,7 @@
 #
 
   - name: 1.1 Install Updates Patches and Additional Security Software (Not Scored)
-    apt: upgrade=yes
+    apt: upgrade=yes update_cache=yes cache_valid_time=600
     sudo: yes
     tags:
       - notscored
