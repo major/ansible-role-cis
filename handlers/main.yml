@@ -34,6 +34,7 @@
   - name: Update depmod
     command: /sbin/depmod
     sudo: yes
+    ignore_errors: yes
 
   - name: Update grub
     command: /usr/sbin/update-grub
