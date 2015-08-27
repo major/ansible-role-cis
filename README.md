@@ -1,3 +1,8 @@
+# DEPRECATED - DON'T USE
+**You'll want to refer to this repository going forward:**
+
+  * https://github.com/major/cis-rhel-ansible
+
 CIS
 =========
 
